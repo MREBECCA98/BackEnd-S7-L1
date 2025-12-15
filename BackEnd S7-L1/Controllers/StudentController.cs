@@ -1,0 +1,73 @@
+﻿using BackEnd_S7_L1.Models.Entities;
+using BackEnd_S7_L1.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BackEnd_S7_L1.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class StudentController : ControllerBase
+    {
+        private readonly StudentService _studentService;
+
+        public StudentController(StudentService studentService)
+        {
+            _studentService = studentService;
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> Gets()
+        {
+            try
+            {
+                return Ok(await _studentService.GetAsNoTracking());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+        }
+
+
+        //by id
+        [HttpGet("{Id:guid}")]
+        public async Task<IActionResult> GetById(Guid Id)
+        {
+            try
+            {
+                if (Guid.Empty == Id)
+                {
+                    return BadRequest();
+                }
+                return Ok(await _studentService.GetByIdAsNoTracking(Id));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        //by name
+        [HttpGet("by-name/{Nome}")]
+        public async Task<IActionResult> GetByName(string Nome)
+        {
+            try
+            {
+                Student student = await _studentService.GetByNameAsNoTracking(Nome);
+
+                if (student is null)
+                {
+                    return BadRequest();
+                }
+                return Ok(student);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+    }
+}

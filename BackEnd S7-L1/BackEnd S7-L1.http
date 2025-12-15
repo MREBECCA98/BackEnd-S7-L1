@@ -1,0 +1,6 @@
+@BackEnd_S7_L1_HostAddress = http://localhost:5035
+
+GET {{BackEnd_S7_L1_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
