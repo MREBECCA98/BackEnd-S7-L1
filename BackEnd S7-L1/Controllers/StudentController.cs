@@ -1,4 +1,5 @@
-﻿using BackEnd_S7_L1.Models.Entities;
+﻿using BackEnd_S7_L1.Models.Dto;
+using BackEnd_S7_L1.Models.Entities;
 using BackEnd_S7_L1.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -68,6 +69,72 @@ namespace BackEnd_S7_L1.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [HttpGet("search/{search-term}")]
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            try
+            {
+                List<Student> students = await _studentService.SearchByTermAsNoTracking(searchTerm);
+                return Ok(students);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<ActionResult<StudentResponseDto>> Delete(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                    return BadRequest();
+
+                StudentResponseDto? result = await _studentService.Delete(id);
+
+                if (result == null)
+                    return NotFound();
+
+                return Ok(result);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> Update(StudentRequestDto student)
+        {
+            try
+            {
+                if (student is not null && student.Id != Guid.Empty)
+                {
+                    Student fromDB = await this._studentService.GetById(student.Id);
+
+                    if (fromDB is not null)
+                    {
+                        fromDB.Nome = student.Nome;
+                        fromDB.Cognome = student.Cognome;
+                        fromDB.Email = student.Email;
+                        bool result = await this._studentService.Save();
+
+                        return result ? Ok() : BadRequest();
+
+                    }
+                }
+                return BadRequest();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
         }
     }
 }
