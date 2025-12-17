@@ -2,6 +2,7 @@
 
 namespace BackEnd_S7_L1.Models.Dto
 {
+    //Request = quello che TU mandi al server.
     public class StudentRequestDto
     {
         [Required]
