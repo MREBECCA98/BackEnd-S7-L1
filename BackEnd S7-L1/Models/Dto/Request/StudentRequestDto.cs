@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BackEnd_S7_L1.Models.Dto
+namespace BackEnd_S7_L1.Models.Dto.Request
 {
     //Request = quello che TU mandi al server.
     public class StudentRequestDto

@@ -1,4 +1,4 @@
-﻿namespace BackEnd_S7_L1.Models.Dto
+﻿namespace BackEnd_S7_L1.Models.Dto.Response
 {
     //Response = quello che IL SERVER ti manda indietro.
     public class StudentResponseDto

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEnd_S7_L1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251217162742_add controler")]
-    partial class addcontroler
+    [Migration("20251218155031_start")]
+    partial class start
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BackEnd_S7_L1.Models.Dto
+namespace BackEnd_S7_L1.Models.Dto.Request
 {
     public class LoginRequestDto
     {

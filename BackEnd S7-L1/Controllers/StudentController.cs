@@ -1,4 +1,5 @@
-﻿using BackEnd_S7_L1.Models.Dto;
+﻿using BackEnd_S7_L1.Models.Dto.Request;
+using BackEnd_S7_L1.Models.Dto.Response;
 using BackEnd_S7_L1.Models.Entities;
 using BackEnd_S7_L1.Services;
 using Microsoft.AspNetCore.Http;

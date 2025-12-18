@@ -4,9 +4,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using BackEnd_S7_L1.Models.Exceptions;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+//SERILOG 
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+Log.Information("Starting application...");
+Log.Information("Registering services");
+
+builder.Services.AddSerilog();
 
 //Identity 
 builder.Services.AddScoped<UserManager<ApplicationUser>>();
@@ -26,6 +38,20 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
 
     }).AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddAuthorization();
+
+try
+{
+    string connection = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new ConfigurationException("String di connessione non trovata");
+
+}
+catch (ConfigurationException ex)
+{
+    Log.Fatal(ex.ToString());
+    await Log.CloseAndFlushAsync();
+    Environment.Exit(1);
+}
 
 // Configure authentication 
 
@@ -72,6 +98,10 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+//SERILOG
+
+app.UseSerilogRequestLogging();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -87,4 +117,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+Log.Information("Startup completed");
+
 app.Run();
+
+await Log.CloseAndFlushAsync();
